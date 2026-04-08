@@ -7,22 +7,33 @@ const STORAGE_KEYS = {
     IS_DARK_MODE: 'isDarkMode'
 };
 
-// Initialize - HECH QANDAY DEFAULT BARBER YO'Q! BO'SH ARRAY!
+// Initialize - YO'Q! HECH QANDAY DEFAULT BARBER YO'Q!
 function initData() {
-    // BARBERS - always empty array, no defaults!
+    // BARBERS - faqat bo'sh array, hech qanday default YO'Q!
     if (!localStorage.getItem(STORAGE_KEYS.BARBERS)) {
         localStorage.setItem(STORAGE_KEYS.BARBERS, JSON.stringify([]));
     }
     
-    // BOOKINGS - empty array
+    // BOOKINGS - bo'sh array
     if (!localStorage.getItem(STORAGE_KEYS.BOOKINGS)) {
         localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify([]));
     }
     
-    // Check dark mode
+    // Dark mode ni tekshirish
     const isDark = localStorage.getItem(STORAGE_KEYS.IS_DARK_MODE);
     if (isDark === 'true') {
         document.body.classList.add('dark-mode');
+    }
+    
+    // Agar eski default barberlar qolgan bo'lsa, ularni o'chirish
+    const currentBarbers = JSON.parse(localStorage.getItem(STORAGE_KEYS.BARBERS) || '[]');
+    if (currentBarbers.length > 0) {
+        // Tekshirish: agar default barberlar (id 1,2,3) bo'lsa, o'chirish
+        const hasDefault = currentBarbers.some(b => b.id === '1' || b.id === '2' || b.id === '3');
+        if (hasDefault) {
+            localStorage.setItem(STORAGE_KEYS.BARBERS, JSON.stringify([]));
+            console.log("Default barberlar o'chirildi!");
+        }
     }
 }
 
@@ -584,5 +595,6 @@ window.logout = function() {
     renderApp();
 };
 
+// Start the app
 initData();
 renderApp();
